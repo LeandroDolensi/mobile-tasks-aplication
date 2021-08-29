@@ -11,5 +11,5 @@
 >
 >
 
->Trabalho realizado em 5 dias para um processo seletivo referente à vaga Desenvolvimento Mobile. 
+>Trabalho realizado para um processo seletivo referente à vaga Desenvolvimento Mobile. 
 
