@@ -8,7 +8,7 @@ import {LogBox, Text, View, ImageBackground, TouchableOpacity, TouchableHighligh
 import styles from './componentes/styles.js';
 
 
-export default function App() {
+const App = () => {
 
   const image = require('./resources/bg.jpg');
   LogBox.ignoreAllLogs();
@@ -55,7 +55,7 @@ export default function App() {
       try {
         await AsyncStorage.setItem('tarefasStorage', JSON.stringify(tarefas));
       } catch (error) {
-        // alert('Erro saving data');
+        // alert('Error saving data');
       }
     })();
   }
@@ -96,7 +96,7 @@ export default function App() {
     for( var i = 0; tarefas[i].id != tarefa_atual.id ; i++ );
     
     // t_finalizada leia-se: tarefa_finalizada = true
-    tarefas[i].t_finalizada = true;
+    tarefas[i].t_finalizada = !(tarefas[i].t_finalizada);
     
     setarTarefas(tarefas);
     salvarInStorage(tarefas);
@@ -106,10 +106,14 @@ export default function App() {
     // esta funação verifica se uma tarefa foi realizada para mostrar riscada ou não
 
     if( tarefa.t_finalizada )
-    return <Text onLongPress={()=> marcarTarefa(tarefa)} style={{textDecorationLine:'line-through'}}>{tarefa.tarefa}</Text>
-
+    return <Text 
+    onLongPress={() => marcarTarefa(tarefa)} 
+    style={{textDecorationLine:'line-through'}}>{tarefa.tarefa}
+    </Text>
     else
-    return <Text onLongPress={()=> marcarTarefa(tarefa)}>{tarefa.tarefa}</Text>
+    return <Text 
+    onLongPress={()=> marcarTarefa(tarefa)}>{tarefa.tarefa}
+    </Text>
   }
 
 
@@ -118,21 +122,28 @@ export default function App() {
         <StatusBar hidden />
 
         <ImageBackground source={image} style={styles.image}>
-        <View style={styles.coverView}><Text style={styles.textHeader}>Raccooner Tasks</Text></View>
+          <View style={styles.coverView}>
+            <Text style={styles.textHeader}>Raccooner Tasks
+            </Text>
+          </View>
         </ImageBackground>
 
-        
+         
         <Modal
         animationType="slide"
         transparent={true}
         visible={modal}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
+          setModal(!modal);
         }}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
 
-            <TextInput onChangeText={text => setTarefaAtual(text)} autoFocus={true}></TextInput>
+            <TextInput 
+            onChangeText={text => setTarefaAtual(text)} autoFocus={true}
+            placeholder='Digite aqui..'
+            style={{marginBottom:15}}/>
+
             <TouchableHighlight
               style={{ ...styles.openButton, backgroundColor: 'rgb(252, 120, 3)' }}
               onPress={() => addTarefa()}>
@@ -149,8 +160,11 @@ export default function App() {
         return(
           <View style={styles.tarefaSingle}>
             
-            <View style={{flex:1, width:'100%', padding:10,}}> 
-              <View>{mostrarTarefa(val)}</View>
+            <View style={{flex:1, width:'100%', padding:10}}> 
+              <View 
+              onLongPress={() => marcarTarefa(tarefa)}>
+                {mostrarTarefa(val)}
+              </View>
             </View>
             
             <View style={{alignItems:'flex-end', flex:1, padding:10}}>
@@ -164,8 +178,11 @@ export default function App() {
 
       <View style={{flex:1, alignItems:'center'}}>
         
-        <TouchableOpacity style={styles.btnAddTarefa} onPress={()=>setModal(true)}><Text
-        style={{textAlign:'center',color:'black'}}>Adicionar Tarefa
+        <TouchableOpacity 
+        style={styles.btnAddTarefa} 
+        onPress={()=>setModal(true)}><Text
+        style={{textAlign:'center',color:'black'}}>
+          Adicionar Tarefa
         </Text>
         </TouchableOpacity>
 
@@ -175,3 +192,4 @@ export default function App() {
   );
 }
 
+export default App;
